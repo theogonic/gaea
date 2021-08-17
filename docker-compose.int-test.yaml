@@ -1,0 +1,31 @@
+# docker-compose --project-directory . -f docker-compose.int-test.yaml up --always-recreate-deps --abort-on-container-exit --exit-code-from tester tester
+# docker-compose --project-directory . -f docker-compose.int-test.yaml down
+version: "3.5"
+services:
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=gaea-int-test
+      - POSTGRES_USER=gaea
+      - POSTGRES_PASSWORD=gaea
+    expose:
+      - "5432"
+    logging: 
+      driver: none
+  
+  tester:
+    image: node:16
+    working_dir: /gaea
+    links:
+      - db
+    volumes:
+      - ".:/gaea"
+    environment:
+      TYPEORM_MIGRATIONS: assets/migrations/*.ts
+      TYPEORM_CONNECTION: postgres
+      TYPEORM_URL: postgres://gaea:gaea@db:5432/gaea-int-test
+    command: bash -c "node -r tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js migration:run && 
+                      npx jest ./test -i
+             "
+
+

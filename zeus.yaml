@@ -1,0 +1,8 @@
+defs:
+  - assets/zeus/**/*.yaml
+generators:
+  ts:
+    output: src/generated/types.ts
+  rest-nestjs:
+    output: src/generated/controllers.ts
+    tsTypeImport: './types'

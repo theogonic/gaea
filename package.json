@@ -1,0 +1,79 @@
+{
+  "name": "@theogonic/gaea",
+  "version": "0.0.1",
+  "description": "Typescript General Entity Library",
+  "main": "dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:int": "scripts/run-integration-test.sh"
+  },
+  "author": "Shihao Xia <charlesxsh@hotmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@nestjs/common": "8.0.6",
+    "@nestjs/core": "8.0.6",
+    "@nestjs/swagger": "5.0.9",
+    "@nestjs/typeorm": "8.0.2",
+    "ajv": "8.6.2",
+    "lodash": "4.17.21",
+    "pg": "8.7.1",
+    "reflect-metadata": "0.1.13",
+    "rimraf": "3.0.2",
+    "rxjs": "7.3.0",
+    "typeorm": "0.2.37",
+    "typescript": "4.3.5",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^8.1.1",
+    "@nestjs/schematics": "^8.0.2",
+    "@nestjs/testing": "^8.0.6",
+    "@theogonic/zeus": "0.0.13",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.1",
+    "@types/js-yaml": "^4.0.2",
+    "@types/lodash": "^4.14.172",
+    "@types/node": "^16.6.1",
+    "@types/supertest": "^2.0.11",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "supertest": "^6.1.5",
+    "ts-jest": "^27.0.4",
+    "ts-loader": "9.2.5",
+    "ts-node": "10.2.0",
+    "tsconfig-paths": "^3.10.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}

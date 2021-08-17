@@ -1,0 +1,95 @@
+import { Test, TestingModule } from "@nestjs/testing";
+import { getEntityManagerToken, TypeOrmModule } from "@nestjs/typeorm";
+import { GeneralObjectModule } from "../src";
+import { EntityManager, getConnectionOptions } from "typeorm";
+import { GenericEntity } from "../src/entities/GeneralEntity";
+import { TestGeneralObject, TestGeneralObjectDao } from "./setup";
+
+describe("Generic Dao Filter Test", () => {
+  let dao: TestGeneralObjectDao;
+  let em: EntityManager;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        TypeOrmModule.forRootAsync({
+          useFactory: async () => {
+            const optionFromEnv = await getConnectionOptions();
+            const option = {
+              ...optionFromEnv,
+              autoLoadEntities: true,
+            };
+            return option;
+          },
+        }),
+        GeneralObjectModule,
+      ],
+      providers: [TestGeneralObjectDao],
+    }).compile();
+    dao = module.get(TestGeneralObjectDao);
+    expect(dao).not.toBeNull();
+    em = module.get(getEntityManagerToken());
+    expect(em).not.toBeNull();
+
+    // Cleaning up the database
+    await em.createQueryBuilder().delete().from(GenericEntity).execute();
+  });
+
+  it("list a general object", async () => {
+    const newObj1 = new TestGeneralObject();
+    const newObj2 = new TestGeneralObject();
+    const newObj3 = new TestGeneralObject();
+
+    newObj1.numArr = [5, 6];
+    newObj3.numArr = [1, 2, 3];
+
+    await dao.save(newObj1);
+    await dao.save(newObj2);
+
+    const savedObj3 = await dao.save(newObj3);
+
+    const res = await dao.listOneByFilter(null, {
+      objectJsonPathPredicts: ["$.numArr[*] ? (@ == 1)"],
+    });
+
+    expect(res).toStrictEqual(savedObj3);
+  });
+
+  it("list some generic objects", async () => {
+    const newObj1 = new TestGeneralObject();
+    const newObj2 = new TestGeneralObject();
+    const newObj3 = new TestGeneralObject();
+    const newObj4 = new TestGeneralObject();
+
+    newObj1.strArr = ["e"];
+    newObj2.strArr = ["b", "e"];
+    newObj3.strArr = ["c"];
+    newObj4.strArr = [];
+    const savedObj1 = await dao.save(newObj1);
+    const savedObj2 = await dao.save(newObj2);
+    const savedObj3 = await dao.save(newObj3);
+    const savedObj4 = await dao.save(newObj4);
+    expect(savedObj1.strArr).toEqual(newObj1.strArr);
+    expect(savedObj2.strArr).toEqual(newObj2.strArr);
+    expect(savedObj3.strArr).toEqual(newObj3.strArr);
+    expect(savedObj4.strArr).toEqual(newObj4.strArr);
+
+    const res = await dao.list(
+      {
+        limit: 4,
+      },
+      null,
+      {
+        objectJsonPathPredicts: ['$ ? (@.strArr[*] == "e")'],
+      }
+    );
+
+    expect(res.items.length).toEqual(2);
+    expect(res.items).toContainEqual(savedObj1);
+    expect(res.items).toContainEqual(savedObj2);
+  });
+
+  afterEach(async () => {
+    await em.connection.close();
+  });
+});

@@ -1,0 +1,21 @@
+types:
+  GeneralObjectStatus:
+    enum:
+      - name: Active
+        value: 1
+      - name: Deleted
+        value: 2
+  GeneralObjectMeta:
+    properties:
+      id:
+        type: string
+      userId:
+        type: string
+      typeId:
+        type: string
+      status:
+        type: GeneralObjectStatus
+      updatedAt: 
+        type: number
+      createdAt:
+        type: number
