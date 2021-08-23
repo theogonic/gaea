@@ -1,5 +1,5 @@
 # Gaea
-A general entity library written in Typescript, powered by [TypeORM](https://github.com/typeorm/typeorm), best to be used with 
+A general entity library written in Typescript, powered by [TypeORM](https://github.com/typeorm/typeorm) and [PostgreSQL(JSONB)](https://www.postgresql.org/docs/current/functions-json.html), best to be used with 
 [Nestjs](https://nestjs.com)
 
 
@@ -11,6 +11,7 @@ A general entity library written in Typescript, powered by [TypeORM](https://git
   - [Features](#features)
   - [Motivation](#motivation)
   - [Usage](#usage)
+    - [Migration (only required in first-time)](#migration-only-required-in-first-time)
     - [Declare Entity](#declare-entity)
     - [Declare DAO (Data Access Object)](#declare-dao-data-access-object)
     - [Manipulate it](#manipulate-it)
@@ -19,13 +20,23 @@ A general entity library written in Typescript, powered by [TypeORM](https://git
 
 ## Features
 1. No need to write **SQL** schema, everything is defined in **Typescript**
-2. No need to run **SQL** migration
+2. No need to run **SQL** migration if schema change
 3. Powerful listing and filtering, including full text search
 
 ## Motivation
 This project aims to provide an out-of-box entity library (an easy way talking to the database) used in rapid development/prototype stage considered to the highly fuzzy demands and usecases.
 
 ## Usage
+
+### Migration (only required in first-time)
+```ts
+export TYPEORM_CONNECTION=postgres
+export TYPEORM_URL="<your postgres database>"
+export TYPEORM_MIGRATIONS="node_modules/@theogonic/gaea/assets/migrations/*.ts"
+
+# run migration (powered by Typeorm)
+$ node -r ts-node/register ./node_modules/typeorm/cli.js migration:run
+```
 
 ### Declare Entity
 ```ts
