@@ -1,23 +1,21 @@
-import { emptyUUID } from '../utils/id';
-import { AbstractGenericObject, GenericObjectStatus } from './types';
+import { BaseGeneralObject } from "./base-general-object";
+import { GeneralObjectStatus } from "./generated/types";
+import { NIL } from "uuid";
+class RandomGeneralObject extends BaseGeneralObject {}
 
-
-class FakeGenericObject extends AbstractGenericObject<any> {}
-
-describe('Generic Object Defualt Behaviors', () => {
-
-  it('Generic Object should have type ID', () => {
-        const gObject = new FakeGenericObject({}, null);
-        expect(gObject.metadata.typeId).toBe(FakeGenericObject.name);
+describe("Generic Object Defualt Behaviors", () => {
+  it("Generic Object should have type ID", () => {
+    const gObject = new RandomGeneralObject({});
+    expect(gObject.meta.typeId).toBe(RandomGeneralObject.name);
   });
 
-  it('Generic Object should have default status', () => {
-    const gObject = new FakeGenericObject({}, null);
-    expect(gObject.metadata.status).toBe(GenericObjectStatus.Active);
+  it("Generic Object should have default status", () => {
+    const gObject = new RandomGeneralObject({});
+    expect(gObject.meta.status).toBe(GeneralObjectStatus.Active);
   });
 
-  it('Generic Object should have default user ID', () => {
-    const gObject = new FakeGenericObject({}, null);
-    expect(gObject.metadata.userId).toBe(emptyUUID);
+  it("Generic Object should have default user ID", () => {
+    const gObject = new RandomGeneralObject({});
+    expect(gObject.meta.userId).toBe(NIL);
   });
 });

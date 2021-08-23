@@ -5,7 +5,7 @@ import { UniversalGeneralObjectDao } from "./ugo.service";
 
 @Module({
   imports: [TypeOrmModule.forFeature([GenericEntity])],
-  exports: [UniversalGeneralObjectDao],
+  exports: [UniversalGeneralObjectDao, TypeOrmModule],
   controllers: [],
   providers: [UniversalGeneralObjectDao],
 })
