@@ -73,20 +73,11 @@ export class standard1562387288107 implements MigrationInterface {
     //     RETURNS trigger AS
     //     $BODY$
     //         BEGIN
-    //             PERFORM pg_notify('gaea_ge_change', json_build_object('id', NEW.id, 'type_id', NEW.type_id, 'op', TG_OP));
+    //             PERFORM pg_notify('gaea_ge_change', json_build_object('id', NEW.id, 'type_id', NEW.type_id, 'op', TG_OP)::TEXT);
     //             RETURN NULL;
     //         END;
     //     $BODY$
     //       LANGUAGE plpgsql VOLATILE
-    //       COST 100;
-    // `);
-
-    // await queryRunner.query(`
-    //     CREATE TRIGGER notify_gaea_ge_change
-    //     AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE
-    //     ON "generic_entities"
-    //     FOR EACH ROW
-    //     EXECUTE PROCEDURE notify_gaea_ge_change();
     // `);
   }
 

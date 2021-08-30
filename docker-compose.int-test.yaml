@@ -19,7 +19,7 @@ services:
     links:
       - db
     volumes:
-      - ".:/gaea"
+      - "./:/gaea"
     environment:
       TYPEORM_MIGRATIONS: assets/migrations/*.ts
       TYPEORM_CONNECTION: postgres
