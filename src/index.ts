@@ -6,3 +6,5 @@ export * from "./base-general-object";
 export * from "./ugo.service";
 export * from "./go.module";
 export * from "./jsonb-sql";
+export * from "./entities/GeneralEntity";
+export * from "./base-subscriber";

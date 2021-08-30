@@ -67,6 +67,27 @@ export class standard1562387288107 implements MigrationInterface {
     await queryRunner.query(`
             CREATE INDEX ${this.genericEntitiesObjectIdx} ON ${this.standardEntities.name} USING gin(object);
         `);
+
+    // await queryRunner.query(`
+    //     CREATE OR REPLACE FUNCTION notify_gaea_ge_change()
+    //     RETURNS trigger AS
+    //     $BODY$
+    //         BEGIN
+    //             PERFORM pg_notify('gaea_ge_change', json_build_object('id', NEW.id, 'type_id', NEW.type_id, 'op', TG_OP));
+    //             RETURN NULL;
+    //         END;
+    //     $BODY$
+    //       LANGUAGE plpgsql VOLATILE
+    //       COST 100;
+    // `);
+
+    // await queryRunner.query(`
+    //     CREATE TRIGGER notify_gaea_ge_change
+    //     AFTER INSERT OR UPDATE OR DELETE OR TRUNCATE
+    //     ON "generic_entities"
+    //     FOR EACH ROW
+    //     EXECUTE PROCEDURE notify_gaea_ge_change();
+    // `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
