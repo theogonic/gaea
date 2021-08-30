@@ -14,8 +14,4 @@ export abstract class BaseGenericObjectSubscriber
   listenTo() {
     return GenericEntity;
   }
-
-  abstract afterInsert(event: InsertEvent<GenericEntity>): Promise<void>;
-  abstract afterUpdate(event: UpdateEvent<GenericEntity>): Promise<void>;
-  abstract afterRemove(event: RemoveEvent<GenericEntity>): Promise<void>;
 }
