@@ -17,5 +17,11 @@ types:
         type: GeneralObjectStatus
       updatedAt: 
         type: number
+        gen:
+          gql:
+            type: Utc
       createdAt:
         type: number
+        gen:
+          gql:
+            type: Utc
