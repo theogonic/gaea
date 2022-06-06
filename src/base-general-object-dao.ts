@@ -56,7 +56,9 @@ export abstract class BaseGeneralObjectDao<
    */
   async listOneByUserId(userId: string): Promise<T> {
     const currTypeId = (this.target as any).typeId;
-    const entity = await this.repo.findOne({ userId, typeId: currTypeId });
+    const entity = await this.repo.findOne({
+      where: { userId, typeId: currTypeId },
+    });
     return this.getObjectFromEntity(entity);
   }
 
@@ -116,7 +118,11 @@ export abstract class BaseGeneralObjectDao<
    * @param id
    */
   async listOne(id: string): Promise<T> {
-    const entity = await this.repo.findOne(id);
+    const entity = await this.repo.findOne({
+      where: {
+        id,
+      },
+    });
     return this.getObjectFromEntity(entity);
   }
 

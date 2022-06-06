@@ -24,7 +24,7 @@ services:
       TYPEORM_MIGRATIONS: assets/migrations/*.ts
       TYPEORM_CONNECTION: postgres
       TYPEORM_URL: postgres://gaea:gaea@db:5432/gaea-int-test
-    command: bash -c "node -r tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js migration:run && 
+    command: bash -c "node -r tsconfig-paths/register -r ts-node/register ./node_modules/typeorm/cli.js migration:run --dataSource assets/datasource.ts  && 
                       npx jest ./test -i
              "
 
