@@ -136,6 +136,15 @@ export abstract class BaseGeneralObjectDao<
     });
   }
 
+  async count(
+    filter?: GeneralObjectFilter<T>,
+    advancedFilter?: AdvancedGeneralObjectFilter
+  ): Promise<number> {
+    const qb = this.repo.createQueryBuilder("d");
+    this.applyFilter(qb, "d", filter, advancedFilter);
+    return qb.getCount();
+  }
+
   /**
    * Returns a list of generic object with given condition
    * @param request Request to list generic object

@@ -70,6 +70,26 @@ describe("Generic Dao CRUD Test", () => {
     expect(savedGenericObj.meta.updatedAt).not.toBeLessThan(oldUpdateAt);
   });
 
+  it("count generic objects", async () => {
+    for (let i = 0; i < 10; i++) {
+      const obj = new TestGeneralObject();
+      obj.str = "123";
+      obj.num = 333;
+      await dao.save(obj);
+    }
+    for (let i = 0; i < 5; i++) {
+      const obj = new TestGeneralObject();
+      obj.str = "333";
+      obj.num = 333;
+      await dao.save(obj);
+    }
+    const cnt1 = await dao.count({ str: "333" });
+    expect(cnt1).toEqual(5);
+
+    const cnt2 = await dao.count({ str: "123" });
+    expect(cnt2).toEqual(10);
+  });
+
   it("update some generic objects", async () => {
     const obj = new TestGeneralObject();
     obj.num = 1;
