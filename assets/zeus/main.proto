@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+option (zeus.gen.ts) = {
+    output: "src/generated/types.ts"
+};
+
+option (zeus.gen.rest_nestjs) = {
+    output: "src/generated/controllers.ts",
+    tsTypeImport: './types'
+};
+
+
+enum GeneralObjectStatus {
+    Active = 1;
+    Deleted = 2;
+}
+
+message GeneralObjectMeta {
+    string id = 0;
+    string userId = 1;
+    string typeId = 2;
+    GeneralObjectStatus status = 3;
+    int32 updatedAt = 4 [(zeus.gql) = {type:"Utc"}];
+    int32 createdAt = 5 [(zeus.gql) = {type:"Utc"}];
+}
+
+message ListObjectsRequest {
+    string id = 0 [(zeus.rest.query) = true];
+    string userId = 1 [(zeus.rest.query) = true];
+    string typeId = 2 [(zeus.rest.query) = true];
+    GeneralObjectStatus status = 3 [(zeus.rest.query) = true];
+    int32 limit = 4 [(zeus.rest.query) = true];
+    string nextToken = 5 [(zeus.rest.query) = true];
+}
+
+message ListObjectsResponse {
+    int32 totalCount = 0;
+    string nextToken = 1;
+    repeated string items = 2;
+}
+
+
+message UpdateObjectRequest {
+    string id = 0;
+    string updatedObject = 1;
+}
+
+message UpdateObjectResponse {
+    string updatedObject = 0;
+}
+
+message DeleteObjectRequest {
+    string id  = 0;
+}
+
+message DeleteObjectResponse {
+    bool success = 0;
+}  
+
+service DaoService {
+
+    rpc listObjects(ListObjectsRequest) returns (ListObjectsResponse) {
+        option (zeus.rest) = {
+            method: "get",
+            path: "gaea/objects"
+        };
+    }
+    rpc updateObject(UpdateObjectRequest) returns (UpdateObjectResponse) {
+        option (zeus.rest) = {
+            method: "put",
+            path: "gaea/object/:id"
+        };
+    }
+    rpc deleteObject(DeleteObjectRequest) returns (DeleteObjectResponse) {
+        option (zeus.rest) = {
+            method: "delete",
+            path: "gaea/object/:id"
+        };
+    }
+}
