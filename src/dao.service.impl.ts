@@ -7,10 +7,11 @@ import {
   UpdateObjectRequest,
   UpdateObjectResponse,
 } from "./generated/types";
-import { GeneralObject, GeneralObjectDao } from "./types";
+import { GeneralObject } from "./types";
+import { UniversalGeneralObjectDao } from "./ugo.service";
 
 export class DaoServiceIml implements DaoService {
-  constructor(private readonly dao: GeneralObjectDao) {}
+  constructor(private readonly dao: UniversalGeneralObjectDao) {}
 
   async listObjects(request: ListObjectsRequest): Promise<ListObjectsResponse> {
     const objs = await this.dao.list(
