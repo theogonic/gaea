@@ -1,3 +1,4 @@
+import { Injectable } from "@nestjs/common";
 import {
   DaoService,
   DeleteObjectRequest,
@@ -10,6 +11,7 @@ import {
 import { GeneralObject } from "./types";
 import { UniversalGeneralObjectDao } from "./ugo.service";
 
+@Injectable()
 export class DaoServiceIml implements DaoService {
   constructor(private readonly dao: UniversalGeneralObjectDao) {}
 
