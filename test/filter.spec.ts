@@ -89,6 +89,58 @@ describe("Generic Dao Filter Test", () => {
     expect(res.items).toContainEqual(savedObj2);
   });
 
+  it("list by full text search", async () => {
+    const newObj1 = new TestGeneralObject();
+    const newObj2 = new TestGeneralObject();
+    const newObj3 = new TestGeneralObject();
+    const newObj4 = new TestGeneralObject();
+
+    newObj1.strArr = ["e", "gaea"];
+    newObj1.str = "hello1";
+    newObj2.strArr = ["b", "e"];
+    newObj3.strArr = ["c"];
+    newObj3.str = "hello1";
+    newObj4.strArr = [];
+    const savedObj1 = await dao.save(newObj1);
+    const savedObj2 = await dao.save(newObj2);
+    const savedObj3 = await dao.save(newObj3);
+    const savedObj4 = await dao.save(newObj4);
+
+    const res = await dao.list(null, null, {
+      objectFullText: "hello1",
+    });
+
+    expect(res.items.length).toEqual(2);
+    expect(res.items).toContainEqual(savedObj1);
+    expect(res.items).toContainEqual(savedObj3);
+  });
+
+  it("list by full text search 2", async () => {
+    const newObj1 = new TestGeneralObject();
+    const newObj2 = new TestGeneralObject();
+    const newObj3 = new TestGeneralObject();
+    const newObj4 = new TestGeneralObject();
+
+    newObj1.strArr = ["e", "gaea"];
+    newObj1.str = "hello1";
+    newObj2.strArr = ["b", "e"];
+    newObj3.strArr = ["c"];
+    newObj3.str = "hello1";
+    newObj4.strArr = [];
+    const savedObj1 = await dao.save(newObj1);
+    const savedObj2 = await dao.save(newObj2);
+    const savedObj3 = await dao.save(newObj3);
+    const savedObj4 = await dao.save(newObj4);
+
+    const res = await dao.list(null, null, {
+      objectFullText: "gaea",
+    });
+
+    expect(res.items.length).toEqual(1);
+    expect(res.items).toContainEqual(savedObj1);
+    //expect(res.items).toContainEqual(savedObj3);
+  });
+
   afterEach(async () => {
     await em.connection.close();
   });
