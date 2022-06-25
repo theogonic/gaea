@@ -160,9 +160,11 @@ describe("Generic Dao Filter Test", () => {
     const savedObj4 = await dao.save(newObj4);
 
     const res = await dao.list(null, null, {
-      rawWhere: (alias) => {
-        return `${alias}.userId = '${newObj1.meta.userId}' AND ${alias}.object->'strArr' ?| array['gaea', 'c']`;
-      },
+      rawWheres: [
+        (alias) => {
+          return `${alias}.userId = '${newObj1.meta.userId}' AND ${alias}.object->'strArr' ?| array['gaea', 'c']`;
+        },
+      ],
     });
 
     expect(res.items.length).toEqual(1);

@@ -34,7 +34,7 @@ export interface AdvancedGeneralObjectFilter {
   objectJsonPathPredicts?: string[];
   objectFullText?: string;
   objectFullTextLang?: string;
-  rawWhere?: (alias: string) => string;
+  rawWheres?: Array<(alias: string) => string>;
 }
 
 /**

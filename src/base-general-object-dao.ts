@@ -358,7 +358,8 @@ export abstract class BaseGeneralObjectDao<
     if (!advancedFilter) {
       advancedFilter = {};
     }
-    const { objectJsonPathPredicts, objectFullText, rawWhere } = advancedFilter;
+    const { objectJsonPathPredicts, objectFullText, rawWheres } =
+      advancedFilter;
     const [meta, obj] = this.destructGeneralObject(filter);
 
     let typeId: string = null;
@@ -423,10 +424,12 @@ export abstract class BaseGeneralObjectDao<
       );
     }
 
-    if (rawWhere) {
-      const actualRawWhere = rawWhere(alias);
-      if (actualRawWhere) {
-        qb.andWhere(actualRawWhere);
+    if (rawWheres) {
+      for (const rawWhere of rawWheres) {
+        const actualRawWhere = rawWhere(alias);
+        if (actualRawWhere) {
+          qb.andWhere(actualRawWhere);
+        }
       }
     }
   }
