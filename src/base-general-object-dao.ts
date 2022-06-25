@@ -358,7 +358,7 @@ export abstract class BaseGeneralObjectDao<
     if (!advancedFilter) {
       advancedFilter = {};
     }
-    const { objectJsonPathPredicts, objectFullText } = advancedFilter;
+    const { objectJsonPathPredicts, objectFullText, rawWhere } = advancedFilter;
     const [meta, obj] = this.destructGeneralObject(filter);
 
     let typeId: string = null;
@@ -421,6 +421,13 @@ export abstract class BaseGeneralObjectDao<
           alias
         )}) @@ plainto_tsquery('${objectFullTextLang}', '${objectFullText}')`
       );
+    }
+
+    if (rawWhere) {
+      const actualRawWhere = rawWhere(alias);
+      if (actualRawWhere) {
+        qb.andWhere(actualRawWhere);
+      }
     }
   }
 

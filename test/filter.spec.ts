@@ -4,6 +4,7 @@ import { GeneralObjectModule } from "../src";
 import { EntityManager, getConnectionOptions } from "typeorm";
 import { GenericEntity } from "../src/entities/GeneralEntity";
 import { TestGeneralObject, TestGeneralObjectDao } from "./setup";
+import { v4 as uuidv4 } from "uuid";
 
 describe("Generic Dao Filter Test", () => {
   let dao: TestGeneralObjectDao;
@@ -134,6 +135,34 @@ describe("Generic Dao Filter Test", () => {
 
     const res = await dao.list(null, null, {
       objectFullText: "gaea",
+    });
+
+    expect(res.items.length).toEqual(1);
+    expect(res.items).toContainEqual(savedObj1);
+    //expect(res.items).toContainEqual(savedObj3);
+  });
+
+  it("list by raw where", async () => {
+    const newObj1 = new TestGeneralObject({ userId: uuidv4() });
+    const newObj2 = new TestGeneralObject();
+    const newObj3 = new TestGeneralObject();
+    const newObj4 = new TestGeneralObject();
+
+    newObj1.strArr = ["e", "gaea"];
+    newObj1.str = "hello1";
+    newObj2.strArr = ["b", "gaea"];
+    newObj3.strArr = ["c"];
+    newObj3.str = "hello1";
+    newObj4.strArr = [];
+    const savedObj1 = await dao.save(newObj1);
+    const savedObj2 = await dao.save(newObj2);
+    const savedObj3 = await dao.save(newObj3);
+    const savedObj4 = await dao.save(newObj4);
+
+    const res = await dao.list(null, null, {
+      rawWhere: (alias) => {
+        return `${alias}.userId = '${newObj1.meta.userId}' AND ${alias}.object->'strArr' ?| array['gaea', 'c']`;
+      },
     });
 
     expect(res.items.length).toEqual(1);
